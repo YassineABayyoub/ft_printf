@@ -6,7 +6,7 @@
 /*   By: yabouayy <yabouayy@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                + +#+#+#+#+#+ +#+           */
 /*   Created: 2026/11/21 13:30:00 by yabouayy          #+#    #+#             */
-/*   Updated: 2026/11/21 13:30:00 by yabouayy         ###   ########.fr       */
+/*   Updated: 2026/11/24 15:23:22 by yabouayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	ft_printf(const char *format, ...)
 	va_list	args;
 	int		i;
 	int		n;
+	int		ret;
 
 	if (!format)
 		return (-1);
@@ -62,9 +63,12 @@ int	ft_printf(const char *format, ...)
 		if (format[i] == '%' && !format[i + 1])
 			return (va_end(args), -1);
 		if (format[i] == '%' && is_conv(format[i + 1]))
-			n += print_format(&args, format[++i]);
+			ret = print_format(&args, format[++i]);
 		else
-			n += write(1, &format[i], 1);
+			ret = write(1, &format[i], 1);
+		if (ret < 0)
+			return (va_end(args), -1);
+		n += ret;
 		i++;
 	}
 	va_end(args);
